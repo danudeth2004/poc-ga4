@@ -24,7 +24,7 @@ export default class extends Controller {
     // Calculate time spent when leaving the page
     const timeSpent = Math.round((Date.now() - this.startTime) / 1000); // in seconds
 
-    gtag("event", "page_time_spent", {
+    window.gtag("event", "page_time_spent", {
       event_category: "engagement",
       event_label: window.location.pathname,
       value: timeSpent,
