@@ -47,7 +47,6 @@ export default class extends Controller {
           params: {
             event_category: "engagement",
             event_label: window.location.pathname,
-            value: timeSpent,
             time_seconds: timeSpent
           }
         }]
@@ -55,14 +54,12 @@ export default class extends Controller {
       // Fallback to gtag if sendBeacon not available
       window.gtag("event", "page_time_spent", {
         page_path: window.location.pathname,
-        duration_seconds: timeSpent,
-        value: timeSpent
+        duration_seconds: timeSpent
       });
     } else {
       window.gtag("event", "page_time_spent", {
         page_path: window.location.pathname,
-        duration_seconds: timeSpent,
-        value: timeSpent
+        duration_seconds: timeSpent
       });
     }
     
