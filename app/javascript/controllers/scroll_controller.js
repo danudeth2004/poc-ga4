@@ -1,15 +1,16 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["position", "percent", "stop"]
+  static targets = ["position", "percent", "stop", "direction"]
 
   connect() {
+    this.lastScrollTop = window.pageYOffset || 0
     this.stopped = false
-    this.stopTarget.textContent = "false"
-
     this.stopTimer = null
 
     this.update()
+    this.stopTarget.textContent = "false"
+    this.directionTarget.textContent = "-"
     window.addEventListener("scroll", this.onScroll)
   }
 
@@ -19,7 +20,16 @@ export default class extends Controller {
   }
 
   onScroll = () => {
-    this.update()
+    const currentScroll =
+      window.pageYOffset || document.documentElement.scrollTop
+
+    if (currentScroll > this.lastScrollTop) {
+      this.directionTarget.textContent = "down"
+    } else if (currentScroll < this.lastScrollTop) {
+      this.directionTarget.textContent = "up"
+    }
+
+    this.lastScrollTop = Math.max(currentScroll, 0)
 
     this.setStopped(false)
 
@@ -27,6 +37,8 @@ export default class extends Controller {
     this.stopTimer = setTimeout(() => {
       this.setStopped(true)
     }, 5000)
+
+    this.update()
   }
 
   update() {
@@ -48,7 +60,7 @@ export default class extends Controller {
 
   setStopped(value) {
     if (this.stopped === value) return
-
+    
     this.stopped = value
     this.stopTarget.textContent = value ? "true" : "false"
   }
