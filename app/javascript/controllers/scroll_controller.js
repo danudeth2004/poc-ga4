@@ -12,6 +12,11 @@ export default class extends Controller {
     this.stopTarget.textContent = "false"
     this.directionTarget.textContent = "-"
     window.addEventListener("scroll", this.onScroll)
+
+    window.gtag("event", "reading_stats", {
+      word_count: this.element.getAttribute("data-scroll-word-count"),
+      page_path: window.location.pathname,
+    })
   }
 
   disconnect() {
