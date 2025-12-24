@@ -21,7 +21,12 @@ export default class extends Controller {
     });
 
     window.gtag("event", "test_send_event", {
-      test: "test"
+      test: "test",
+      test2: "test2",
+      test3: "test3",
+      test4: "test4",
+      test5: "test5",
+      test6: "test6",
     });
   }
 
