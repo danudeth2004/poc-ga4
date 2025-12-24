@@ -2,7 +2,7 @@
     <%= link_to "Save Draft", "#", class: "px-6 py-2 text-white bg-blue-400 rounded-lg" %>
 </div>
 
-<div class="top-4 left-4 fixed text-center border p-4 mb-20">
+<div class="top-4 left-4 fixed text-center border p-4 mb-20 bg-white">
     <p class="text-xl">
         Word count: <%= Content.first.text.split.count * 5 %>
     </p>
@@ -15,6 +15,7 @@
     <div data-controller="scroll" class="mt-4">
         <div>Scroll: <span data-scroll-target="position"></span> px</div>
         <div>Progress: <span data-scroll-target="percent"></span>%</div>
+        <div class="mt-4">Stop: <span data-scroll-target="stop"></span></div>
     </div>
 
 </div>
