@@ -1,1 +1,42 @@
-<p>test</p>
+<div class="top-4 right-4 fixed">
+    <%= link_to "Save Draft", "#", class: "px-6 py-2 text-white bg-blue-400 rounded-lg" %>
+</div>
+
+<div class="top-4 left-4 fixed text-center border p-4 mb-20">
+    <p class="text-xl">
+        Word count: <%= Content.first.text.split.count * 5 %>
+    </p>
+    <p class="text-xl mt-4">
+        Range: <%= Content.first.text.split.count.to_f * 5.0 / 160.0 %>m < time in page>= <%= Content.first.text.split.count.to_f * 5.0 / 100.0 %>m
+    </p>
+    <p class="text-md text-gray-600">
+        speed(160wpm)<br>slow(100wpm)
+    </p>
+    <div data-controller="scroll" class="mt-4">
+        <div>Scroll: <span data-scroll-target="position"></span> px</div>
+        <div>Progress: <span data-scroll-target="percent"></span>%</div>
+    </div>
+
+</div>
+
+<div class="justify-center w-full p-10">
+    <div class="mx-auto max-w-4xl px-6">
+        <div class="mb-12 text-center">
+            <h1 class="text-4xl font-bold text-gray-900">
+                <%= @content.title %>
+            </h1>
+            <p class="mt-4 text-xl text-gray-600">
+                <%= @content.description %>
+            </p>
+            <p class="mt-2 text-sm text-gray-500">
+                Last updated: <%= @content.created_at.strftime("%B %d, %Y") %>
+            </p>
+        </div>
+
+        <% 5.times.each do %>
+        <div class="space-y-2 mb-10 text-lg">
+            <%= @content.text %>
+        </div>
+        <% end %>
+    </div>
+</div>
