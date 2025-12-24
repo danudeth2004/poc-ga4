@@ -14,7 +14,7 @@ export default class extends Controller {
     window.addEventListener("scroll", this.onScroll)
 
     window.gtag("event", "reading_stats", {
-      word_count: Number(this.element.getAttribute("data-scroll-word-count")),
+      word_count: 100,
       page_path: window.location.pathname,
     })
   }
