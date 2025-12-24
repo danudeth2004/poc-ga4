@@ -1,52 +1,54 @@
-<div class="top-4 right-4 fixed">
-    <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "px-6 py-2 text-white bg-red-400 rounded-lg" %>
-</div>
-
-<div class="bottom-4 right-4 fixed">
-    <%= link_to "Save Draft", "#", class: "px-6 py-2 text-white bg-blue-400 rounded-lg" %>
-</div>
-
-<div class="top-4 left-4 fixed text-center border p-4 mb-20 bg-white">
-    <p class="text-xl underline">
-        user_id: <%= current_user.id %> (<%= current_user.email %>)
-    </p>
-    <p class="text-xl underline mt-2">
-        Word count: <%= Content.first.text.split.count * 5 %>
-    </p>
-    <p class="text-xl mt-4 underline">
-        Range: <%= Content.first.text.split.count.to_f * 5.0 / 160.0 %>m < time in page>= <%= Content.first.text.split.count.to_f * 5.0 / 100.0 %>m
-    </p>
-    <p class="text-md text-gray-600">
-        speed(160wpm) to slow(100wpm)
-    </p>
-    <div data-controller="scroll" class="mt-4">
-        <p class="text-xl underline">Scroll</p>
-        <div class="mt-2">Scroll: <span data-scroll-target="position"></span> px</div>
-        <div>Progress: <span data-scroll-target="percent"></span>%</div>
-        <div class="mt-2">Scroll direction: <span data-scroll-target="direction"></span></div>
-        <div class="mt-2">Stop: <span data-scroll-target="stop"></span></div>
+<div data-controller="ga4" data-ga-user-id="<%= current_user.id %>">
+    <div class="top-4 right-4 fixed">
+        <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "px-6 py-2 text-white bg-red-400 rounded-lg" %>
     </div>
 
-</div>
+    <div class="bottom-4 right-4 fixed">
+        <%= link_to "Save Draft", "#", class: "px-6 py-2 text-white bg-blue-400 rounded-lg" %>
+    </div>
 
-<div class="justify-center w-full p-10">
-    <div class="mx-auto max-w-4xl px-6">
-        <div class="mb-12 text-center">
-            <h1 class="text-4xl font-bold text-gray-900">
-                <%= @content.title %>
-            </h1>
-            <p class="mt-4 text-xl text-gray-600">
-                <%= @content.description %>
-            </p>
-            <p class="mt-2 text-sm text-gray-500">
-                Last updated: <%= @content.created_at.strftime("%B %d, %Y") %>
-            </p>
+    <div class="top-4 left-4 fixed text-center border p-4 mb-20 bg-white">
+        <p class="text-xl underline">
+            user_id: <%= current_user.id %> (<%= current_user.email %>)
+        </p>
+        <p class="text-xl underline mt-2">
+            Word count: <%= Content.first.text.split.count * 5 %>
+        </p>
+        <p class="text-xl mt-4 underline">
+            Range: <%= Content.first.text.split.count.to_f * 5.0 / 160.0 %>m < time in page>= <%= Content.first.text.split.count.to_f * 5.0 / 100.0 %>m
+        </p>
+        <p class="text-md text-gray-600">
+            speed(160wpm) to slow(100wpm)
+        </p>
+        <div data-controller="scroll" class="mt-4">
+            <p class="text-xl underline">Scroll</p>
+            <div class="mt-2">Scroll: <span data-scroll-target="position"></span> px</div>
+            <div>Progress: <span data-scroll-target="percent"></span>%</div>
+            <div class="mt-2">Scroll direction: <span data-scroll-target="direction"></span></div>
+            <div class="mt-2">Stop: <span data-scroll-target="stop"></span></div>
         </div>
 
-        <% 5.times.each do %>
-        <div class="space-y-2 mb-10 text-lg">
-            <%= @content.text %>
+    </div>
+
+    <div class="justify-center w-full p-10">
+        <div class="mx-auto max-w-4xl px-6">
+            <div class="mb-12 text-center">
+                <h1 class="text-4xl font-bold text-gray-900">
+                    <%= @content.title %>
+                </h1>
+                <p class="mt-4 text-xl text-gray-600">
+                    <%= @content.description %>
+                </p>
+                <p class="mt-2 text-sm text-gray-500">
+                    Last updated: <%= @content.created_at.strftime("%B %d, %Y") %>
+                </p>
+            </div>
+
+            <% 5.times.each do %>
+            <div class="space-y-2 mb-10 text-lg">
+                <%= @content.text %>
+            </div>
+            <% end %>
         </div>
-        <% end %>
     </div>
 </div>

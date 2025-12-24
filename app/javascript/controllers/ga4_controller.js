@@ -11,7 +11,8 @@ export default class extends Controller {
     }
     gtag("js", new Date());
     gtag("config", measurementId, {
-        
+        user_id: this.element.getAttribute("data-ga-user-id"),
+        page_path: window.location.pathname,
     });
   }
 }
