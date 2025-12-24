@@ -7,7 +7,7 @@
         <%= link_to "Save Draft", "#", class: "px-6 py-2 text-white bg-blue-400 rounded-lg" %>
     </div>
 
-    <div class="top-4 left-4 fixed text-center border p-4 mb-20 bg-white">
+    <div data-controller="scroll" class="top-4 left-4 fixed text-center border p-4 mb-20 bg-white">
         <p class="text-xl underline">
             user_id: <%= current_user.id %> (<%= current_user.email %>)
         </p>
@@ -20,7 +20,7 @@
         <p class="text-md text-gray-600">
             speed(160wpm) to slow(100wpm)
         </p>
-        <div data-controller="scroll" class="mt-4">
+        <div class="mt-4">
             <p class="text-xl underline">Scroll</p>
             <div class="mt-2">Scroll: <span data-scroll-target="position"></span> px</div>
             <div>Progress: <span data-scroll-target="percent"></span>%</div>

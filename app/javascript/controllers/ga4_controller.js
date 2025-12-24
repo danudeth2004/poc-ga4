@@ -11,6 +11,7 @@ export default class extends Controller {
     }
     gtag("js", new Date());
     gtag("config", measurementId, {
+        debug_mode: true,
         user_id: this.element.getAttribute("data-ga-user-id"),
         page_path: window.location.pathname,
     });
