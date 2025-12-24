@@ -19,6 +19,10 @@ export default class extends Controller {
       word_count: Number(this.element.getAttribute("data-scroll-word-count")),
       page_path: window.location.pathname,
     });
+
+    window.gtag("event", "test_send_event", {
+      test: "test"
+    });
   }
 
   disconnect() {
