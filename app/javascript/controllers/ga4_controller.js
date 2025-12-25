@@ -1,6 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+  static targets = ["timeSpent"];
+  
   connect() {
     const measurementId = "G-2PRQ2Z5LXL";
     window.dataLayer = window.dataLayer || [];
@@ -19,6 +21,11 @@ export default class extends Controller {
     // Start tracking time on page
     this.startTime = Date.now();
     
+    // Update time spent display every second
+    this.updateInterval = setInterval(() => {
+      this.updateTimeSpentDisplay();
+    }, 1000);
+    
     // Handle page close/refresh
     this.handleBeforeUnload = this.handleBeforeUnload.bind(this);
     window.addEventListener("beforeunload", this.handleBeforeUnload);
@@ -26,11 +33,19 @@ export default class extends Controller {
   
   disconnect() {
     this.sendTimeSpent();
+    clearInterval(this.updateInterval);
     window.removeEventListener("beforeunload", this.handleBeforeUnload);
   }
   
   handleBeforeUnload() {
     this.sendTimeSpent();
+  }
+  
+  updateTimeSpentDisplay() {
+    if (!this.startTime || !this.hasTimeSpentTarget) return;
+    
+    const timeSpent = Math.round((Date.now() - this.startTime) / 1000);
+    this.timeSpentTarget.textContent = timeSpent;
   }
   
   sendTimeSpent() {
