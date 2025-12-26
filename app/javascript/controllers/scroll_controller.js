@@ -1,38 +1,33 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["position", "percent", "stop", "direction"];
+  static targets = ["position", "percent", "stop", "direction", "timeSpent"];
 
   connect() {
     this.lastScrollTop = window.pageYOffset || 0;
     this.stopped = false;
     this.stopTimer = null;
 
+    this.startTime = Date.now();
+    this.sentStats = false;
+
     this.update();
     this.stopTarget.textContent = "false";
     this.directionTarget.textContent = "-";
+
     window.addEventListener("scroll", this.onScroll);
 
-    console.log(Number(this.element.getAttribute("data-scroll-word-count")));
-
-    window.gtag("event", "reading_stats", {
-      word_count: Number(this.element.getAttribute("data-scroll-word-count")),
-      page_path: window.location.pathname,
-    });
-
-    window.gtag("event", "test_send_event", {
-      test: "test",
-      test2: "test2",
-      test3: "test3",
-      test4: "test4",
-      test5: "test5",
-      test6: "test6",
-    });
+    this.updateInterval = setInterval(() => {
+      this.updateTimeSpentDisplay();
+    }, 1000);
   }
 
   disconnect() {
     window.removeEventListener("scroll", this.onScroll);
     clearTimeout(this.stopTimer);
+    clearInterval(this.updateInterval);
+
+    this.sendReadingStats();
   }
 
   onScroll = () => {
@@ -59,7 +54,6 @@ export default class extends Controller {
 
   update() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
     const docHeight = document.documentElement.scrollHeight;
     const winHeight = window.innerHeight;
     const scrollable = docHeight - winHeight;
@@ -78,5 +72,28 @@ export default class extends Controller {
 
     this.stopped = value;
     this.stopTarget.textContent = value ? "true" : "false";
+  }
+
+  updateTimeSpentDisplay() {
+    if (!this.startTime || !this.hasTimeSpentTarget) return;
+
+    const seconds = Math.round((Date.now() - this.startTime) / 1000);
+    this.timeSpentTarget.textContent = seconds;
+  }
+
+  sendReadingStats() {
+    if (!this.startTime || this.sentStats) return;
+
+    const seconds = Math.round((Date.now() - this.startTime) / 1000);
+    this.sentStats = true;
+
+    window.gtag("event", "reading_stats", {
+      word_count: Number(
+        this.element.getAttribute("data-scroll-word-count")
+      ),
+      duration_seconds: seconds,
+    });
+
+    this.startTime = null;
   }
 }
