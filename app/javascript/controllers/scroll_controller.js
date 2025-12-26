@@ -18,16 +18,18 @@ export default class extends Controller {
     window.addEventListener("scroll", this.onScroll);
 
     this.updateInterval = setInterval(() => {
-      this.updateTimeSpentDisplay();
+      this.updateTimeSpent();
     }, 1000);
+
+    // backup: ตอนปิด tab
+    window.addEventListener("beforeunload", this.sendReadingStats);
   }
 
   disconnect() {
     window.removeEventListener("scroll", this.onScroll);
+    window.removeEventListener("beforeunload", this.sendReadingStats);
     clearTimeout(this.stopTimer);
     clearInterval(this.updateInterval);
-
-    this.sendReadingStats();
   }
 
   onScroll = () => {
@@ -41,7 +43,6 @@ export default class extends Controller {
     }
 
     this.lastScrollTop = Math.max(currentScroll, 0);
-
     this.setStopped(false);
 
     clearTimeout(this.stopTimer);
@@ -65,35 +66,48 @@ export default class extends Controller {
 
     this.positionTarget.textContent = Math.round(scrollTop);
     this.percentTarget.textContent = percent;
+
+    if (percent >= 50) {
+      this.Send();
+    }
   }
 
   setStopped(value) {
     if (this.stopped === value) return;
-
     this.stopped = value;
     this.stopTarget.textContent = value ? "true" : "false";
   }
 
-  updateTimeSpentDisplay() {
-    if (!this.startTime || !this.hasTimeSpentTarget) return;
+  updateTimeSpent() {
+    if (!this.startTime) return;
 
     const seconds = Math.round((Date.now() - this.startTime) / 1000);
     this.timeSpentTarget.textContent = seconds;
+
+    if (seconds >= 10) {
+      this.Send();
+    }
   }
 
-  sendReadingStats() {
+  Send() {
+    if (this.sentStats) return;
+    this.sendReadingStats();
+  }
+
+  sendReadingStats = () => {
     if (!this.startTime || this.sentStats) return;
+    if (typeof window.gtag !== "function") return;
 
     const seconds = Math.round((Date.now() - this.startTime) / 1000);
+
     this.sentStats = true;
 
-    window.gtag("event", "reading_stats", {
-      word_count: Number(
-        this.element.getAttribute("data-scroll-word-count")
-      ),
+    gtag("event", "reading_stats", {
+      word_count: Number(this.element.dataset.scrollWordCount),
       duration_seconds: seconds,
+      scroll_direction: this.directionTarget?.textContent || "unknown"
     });
 
     this.startTime = null;
-  }
+  };
 }
