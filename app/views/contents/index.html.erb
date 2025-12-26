@@ -1,4 +1,4 @@
-<div class="justify-center w-full">
+<div data-controller="ga4" data-ga4-user-id="<%= current_user.id %>" class="justify-center w-full">
     <div class="top-4 right-4 fixed">
         <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "px-6 py-2 text-white bg-red-400 rounded-lg" %>
     </div>
