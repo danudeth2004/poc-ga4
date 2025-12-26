@@ -105,9 +105,6 @@ export default class extends Controller {
     gtag("event", "reading_stats", {
       word_count: Number(this.element.dataset.scrollWordCount),
       duration_seconds: seconds,
-      scroll_direction: this.directionTarget?.textContent || "unknown"
     });
-
-    this.startTime = null;
   };
 }
