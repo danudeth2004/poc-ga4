@@ -1,12 +1,13 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["position", "percent", "stop", "direction", "timeSpent"];
+  static targets = ["position", "percent", "stop", "direction", "timeSpent", "stops"];
 
   connect() {
     this.lastScrollTop = window.pageYOffset || 0;
     this.stopped = false;
     this.stopTimer = null;
+    this.stops = [];
 
     this.startTime = Date.now();
     this.sentStats = false;
@@ -21,7 +22,6 @@ export default class extends Controller {
       this.updateTimeSpent();
     }, 1000);
 
-    // backup: ตอนปิด tab
     window.addEventListener("beforeunload", this.sendReadingStats);
   }
 
@@ -76,6 +76,50 @@ export default class extends Controller {
     if (this.stopped === value) return;
     this.stopped = value;
     this.stopTarget.textContent = value ? "true" : "false";
+
+    if (value === true) {
+      this.recordStop();
+    }
+  }
+
+  recordStop() {
+    const scrollTop =
+      window.pageYOffset || document.documentElement.scrollTop;
+
+    const docHeight = document.documentElement.scrollHeight;
+    const winHeight = window.innerHeight;
+    const scrollable = docHeight - winHeight;
+
+    const percent =
+      scrollable > 0
+        ? Math.round((scrollTop / scrollable) * 100)
+        : 0;
+
+    const seconds = Math.round((Date.now() - this.startTime) / 1000);
+
+    this.stops.push({
+      percent,
+      time: seconds,
+    });
+
+    this.renderStops();
+  }
+
+  renderStops() {
+    if (this.stops.length === 0) {
+      this.stopsTarget.textContent = "No stops yet";
+      return;
+    }
+
+    this.stopsTarget.innerHTML = this.stops
+      .map(
+        (stop, index) => `
+          <div>
+            ${index + 1}: ${stop.percent}% at ${stop.time}s
+          </div>
+        `
+      )
+      .join("");
   }
 
   updateTimeSpent() {
